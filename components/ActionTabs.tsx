@@ -48,7 +48,7 @@ export default function ActionTabs() {
           </p>
         </div>
         <pre className="flex-grow p-2 rounded overflow-auto w-11/12 mx-auto">
-          {parseAns(output.value).stdout}
+          {output?.value ? parseAns(output.value)?.stdout : ""}
         </pre>
       </ResizablePanel>
     </ResizablePanelGroup>

@@ -33,6 +33,7 @@ const useCodeActions = () => {
         status: "loading",
         value: output.value,
       });
+  
       const res = await apiClient.post(
         "/submissions",
         {
@@ -42,15 +43,23 @@ const useCodeActions = () => {
         },
         {
           params: {
-            //   base64_encoded: true,
+            // base64_encoded: true,
           },
         }
       );
-      const data = res.data;
+  
+      let data;
+      try {
+        data = res.data;
+      } catch (parseError) {
+        console.error("Error parsing JSON:", parseError);
+        throw new Error("Failed to parse JSON response");
+      }
+  
       return getCodeResult(data.token);
     } catch (error) {
-      console.error(error);
-      return error
+      console.error("Error in submitCode:", error);
+      return error;
     }
   }
 

@@ -30,18 +30,22 @@ export const convertToBase64 = (code: string) => {
 };
 
 export const parseAns = (outputString: string) => {
-  const output: {
-    stdout: string | null;
-    time: string | null;
-    memory: string | null;
-    stderr: string | null;
-    token: string;
-    compile_output: string | null;
-    message: string | null;
-    status: {
-      id: number;
-      description: string;
+  try {
+    return JSON.parse(outputString) as {
+      stdout: string | null;
+      time: string | null;
+      memory: string | null;
+      stderr: string | null;
+      token: string;
+      compile_output: string | null;
+      message: string | null;
+      status: {
+        id: number;
+        description: string;
+      };
     };
-  } = JSON.parse(outputString);
-  return output;
+  } catch (error) {
+    console.error("Failed to parse output string:", error);
+    return null;
+  }
 };
