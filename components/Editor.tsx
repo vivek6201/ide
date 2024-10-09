@@ -1,7 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { codeAtom, languageAtom, outputAtom } from "@/store/store";
 import {
   Select,
@@ -22,20 +22,20 @@ const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
 
 export default function Editor() {
   const [code, setCode] = useRecoilState(codeAtom);
-  const [langId, setLangId] = useRecoilState(languageAtom);
+  const setLangId = useSetRecoilState(languageAtom);
   const [language, setLanguage] = useState("cpp");
   const { submitCode } = useCodeActions();
   const output = useRecoilValue(outputAtom);
 
-  const getLanguageId = (lang: string) => {
+  const getLanguageId = useCallback((lang: string) => {
     const id = languages.get(lang);
     if (!id) return;
     setLangId(id);
-  };
+  }, [setLangId]);
 
   useEffect(() => {
     getLanguageId(language);
-  }, [language]);
+  }, [language, getLanguageId]);
 
   return (
     <div className="h-full">
@@ -66,9 +66,11 @@ export default function Editor() {
           onClick={submitCode}
         >
           Run
-          {
-            output.status === "loading" ? <Loader2 size={16} className="animate-spin"/> : <PlayIcon size={16} />
-          }
+          {output.status === "loading" ? (
+            <Loader2 size={16} className="animate-spin" />
+          ) : (
+            <PlayIcon size={16} />
+          )}
         </Button>
       </div>
       <div className="bg-[#202020] px-5 pb-5">

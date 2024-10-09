@@ -24,7 +24,7 @@ export default function ClientEditorLayout() {
   if (isMobile) {
     return (
       <div className="h-[calc(100vh-64px)] bg-background text-foreground max-h-screen">
-        <Tabs defaultValue="editor" className="flex flex-col h-full max-h-screen">
+        <Tabs defaultValue="editor" className="flex flex-col h-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="editor">Editor</TabsTrigger>
             <TabsTrigger value="actions">Actions</TabsTrigger>
